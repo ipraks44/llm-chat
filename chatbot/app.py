@@ -29,7 +29,7 @@ prompt=ChatPromptTemplate.from_messages(
 )
 
 ##Streamlit
-st.title("Langchain demo")
+st.title("Langchain Issac demo")
 input_text=st.text_input("Ask Questions")
 
 
