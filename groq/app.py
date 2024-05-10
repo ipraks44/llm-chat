@@ -26,9 +26,9 @@ if "vector" not in st.session_state:
     st.session_state.docs=st.session_state.loader.load()
     st.session_state.text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20)
     st.session_state.final_documents=st.session_state.text_splitter.split_documents(st.session_state.docs)
-    st.session_state.vectors=FAISS.from_documents(st.session_state.final_documents,st.session_state.embeddings)
+    st.session_state.vectors=FAISS.from_documents(st.session_state.final_documents[:1],st.session_state.embeddings)
 st.title("Chat groq for Issac")
-llm=ChatGroq(groq_api=groq_api,
+llm=ChatGroq(groq_api_key=groq_api,
              model="Gemma-7b-It")
 
 prompt=ChatPromptTemplate.from_template(
@@ -43,7 +43,7 @@ prompt=ChatPromptTemplate.from_template(
 
 
 document_chain=create_stuff_documents_chain(llm,prompt)
-retriever = st.session_state.vectors.as_retreiver()
+retriever = st.session_state.vectors.as_retriever()
 retrieval_chain = create_retrieval_chain(retriever,document_chain)
 
 prompt=st.text_input("Input here:")
