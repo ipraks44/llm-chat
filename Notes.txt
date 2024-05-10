@@ -1,0 +1,12 @@
+#########
+
+
+
+
+
+
+############
+
+streamlit run app.py 
+
+ollama pull llama2
