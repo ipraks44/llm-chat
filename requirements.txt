@@ -10,3 +10,5 @@ chromadb
 bs4
 pypdf
 faiss-cpu
+arxiv
+wikipedia
