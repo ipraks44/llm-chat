@@ -6,7 +6,7 @@ from langchain_community.embeddings import OllamaEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains import create_retrival_chain
+from langchain.chains import create_retrieval_chain
 from langchain_community.vectorstores import FAISS
 import configparser
 import time
@@ -25,7 +25,7 @@ if "vector" not in st.session_state:
     st.session_state.loader=WebBaseLoader("https://docs.smith.langchain.com/")
     st.session_state.docs=st.session_state.loader.load()
     st.session_state.text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20)
-    st.session_state.final_documents=st.session_state.text.splitter.split_documents(st.session_state.docs,st.session_state.embeddings)
+    st.session_state.final_documents=st.session_state.text_splitter.split_documents(st.session_state.docs)
     st.session_state.vectors=FAISS.from_documents(st.session_state.final_documents,st.session_state.embeddings)
 st.title("Chat groq for Issac")
 llm=ChatGroq(groq_api=groq_api,
@@ -42,9 +42,9 @@ prompt=ChatPromptTemplate.from_template(
 )
 
 
-document_chain=create_retrival_chain(llm,prompt)
-retriever = st.session_state.vector.as_retreiver()
-retrieval_chain = create_retrival_chain(retriever,document_chain)
+document_chain=create_stuff_documents_chain(llm,prompt)
+retriever = st.session_state.vectors.as_retreiver()
+retrieval_chain = create_retrieval_chain(retriever,document_chain)
 
 prompt=st.text_input("Input here:")
 
@@ -53,6 +53,6 @@ if prompt:
     response=retrieval_chain.invoke({"input":prompt})
     print("Response:",time.process_time()-start)
     st.write(response['answer'])
-    
+
 
 
