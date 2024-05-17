@@ -60,7 +60,6 @@ if st.button("Document Embeddings"):
 
 
 if prompt1:
-        
     documents_chain=create_stuff_documents_chain(llm,prompt)
     retriever=st.session_state.vectors.as_retriever()
     retrival_chain=create_retrieval_chain(retriever,documents_chain)
